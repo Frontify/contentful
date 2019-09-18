@@ -1,0 +1,39 @@
+{
+
+  "id": "frontify",
+  "name": "Frontify",
+  "src": "http://localhost",
+  "fieldTypes": [
+    "Symbol",
+    "Symbols",
+    "Asset",
+    "Assets"
+  ],
+  "parameters": {
+    "installation": [
+      {
+        "id": "devMode",
+        "type": "Boolean",
+        "name": "Run in development mode"
+      }
+    ],
+    "instance": [
+      {
+        "id": "domain",
+        "type": "Symbol",
+        "name": "Frontify Domain",
+        "description": "Your Frontify domain, e.g. https://weare.frontify.com",
+        "default": "https://weare.frontify.com",
+        "required": true
+      },
+      {
+        "id": "accessToken",
+        "type": "Symbol",
+        "name": "Access Token",
+        "description": "Defines which assets are accessible",
+        "default": "XSYF3jxtdgdrtG631fJznHW6cGoAzKgfYYCyZWaC",
+        "required": true
+      }
+    ]
+  }
+}

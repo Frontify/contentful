@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Frontify Asset Chooser</title>
+        <style>
+            html, body, #container {
+                height: 100%;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            iframe {
+                border: 0;
+                height: 100%;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="https://unpkg.com/contentful-ui-extensions-sdk@3"></script>
+        <script>
+            const container = document.getElementById('container');
+            let token, domain;
+
+            const extension =  window.contentfulExtension;
+            extension.init(api => {
+                api.window.updateHeight(700);
+
+                token = 'XSYF3jxtdgdrtG631fJznHW6cGoAzKgfYYCyZWaC';
+                domain = 'https://weare.frontify.com';
+
+                if (api.location.is(extension.locations.LOCATION_ENTRY_FIELD)) {
+                    renderField(api.field.getValue());
+                }
+            });
+
+            function renderField() {
+                container.innerHTML = '<iframe src="' + domain + '/external-asset-chooser" id="chooser" style="border: 0"></iframe>';
+
+                // We subscribe to the postMessage bus and handle expected messages.
+                window.addEventListener('message', event => {
+                    // Return early if the event doesn't contain any payload.
+                    if (!event.data) {
+                        return;
+                    }
+
+                    console.debug('Received this postMessage from the iframe:', event.data);
+
+                    // The Asset Chooser is fully loaded and now requests the API Access Token.
+                    if (event.data.configurationRequested) {
+                        sendData({token: token, mode: 'tree'});
+                    }
+
+                    // The user has chosen at least one asset - the asset ids are sent as an array and can be processed furhter.
+                    // Now it's also a good moment to close the frame respectively remove the iframe and continue to the previous
+                    // workflow.
+                    if (event.data.assetsChosen) {
+                        handleAssetSelectionById(event.data.assetsChosen);
+                        closeChooser();
+                    }
+
+                    // The user pressed the "Cancel" button. The Asset Chooser can be removed and the previous workflow can be
+                    // continued.
+                    if (event.data.aborted) {
+                        closeChooser();
+                    }
+
+                    // An error occurred. It should be handled properly.
+                    if (event.data.error) {
+                        handleError(event.data.error);
+                    }
+                }, false);
+            }
+
+            function sendData(payload) {
+                console.debug('Send this postMessage to the iframe:', payload);
+                document.getElementById('chooser').contentWindow.postMessage(payload, domain + '/external-asset-chooser');
+            }
+
+            function handleAssetSelectionById(ids) {
+                alert('The following ids have been selected: ' + JSON.stringify(ids));
+            }
+
+            function closeChooser() {
+                console.debug('Removing the iframe.');
+                var frame = document.getElementById('chooser');
+                frame.parentNode.removeChild(frame);
+            }
+
+            function handleError(errorMessage) {
+                alert('An error occurred: ' + errorMessage);
+            }
+        </script>
+    </body>
+</html>
