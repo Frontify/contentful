@@ -1,23 +1,10 @@
 {
-
-  "id": "frontify",
-  "name": "Frontify",
-  "src": "http://localhost",
-  "fieldTypes": [
-    "Symbol",
-    "Symbols",
-    "Asset",
-    "Assets"
-  ],
+  "id": "frontify-assets",
+  "name": "Bynder Assets",
+  "srcdoc": "./build/index.html",
+  "fieldTypes": ["Object"],
   "parameters": {
     "installation": [
-      {
-        "id": "devMode",
-        "type": "Boolean",
-        "name": "Run in development mode"
-      }
-    ],
-    "instance": [
       {
         "id": "domain",
         "type": "Symbol",
@@ -25,12 +12,14 @@
         "description": "Your Frontify domain, e.g. https://weare.frontify.com",
         "default": "https://weare.frontify.com",
         "required": true
-      },
+      }
+    ],
+    "instance": [
       {
         "id": "accessToken",
         "type": "Symbol",
         "name": "Access Token",
-        "description": "Defines which assets are accessible",
+        "description": "Your Frontify access token",
         "default": "XSYF3jxtdgdrtG631fJznHW6cGoAzKgfYYCyZWaC",
         "required": true
       }
