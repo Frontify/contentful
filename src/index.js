@@ -20,14 +20,7 @@ setup({
             description: 'Your Frontify domain, e.g. https://weare.frontify.com',
             default: 'https://weare.frontify.com',
             required: true,
-        },
-        {
-            id: 'defaultAccessToken',
-            type: 'Symbol',
-            name: 'Client ID',
-            description: 'Your Frontify client ID',
-            required: true,
-        },
+        }
     ],
     makeThumbnail,
     renderDialog,
@@ -49,7 +42,7 @@ function renderDialog(sdk) {
 
     const finderStart = async () => {
         const finder = await create({
-            clientId: config.accessToken,
+            clientId: "contentful",
             domain: config.domain,
             options: {
                 allowMultiSelect: true,
