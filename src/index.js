@@ -109,7 +109,8 @@ async function openDialog(sdk) {
         copyright: item.copyright,
         licenses: item.licenses,
         description: item.description,
-        type: item.type
+        type: item.type,
+        appVersion: "2.0.0"
     }));
 }
 
