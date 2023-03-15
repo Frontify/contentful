@@ -70,20 +70,13 @@ function renderDialog(sdk) {
 
 async function openDialog(sdk) {
     const params = sdk.parameters;
-    // Use per-field client ID first, if not provided then default to app config.
-    const accessToken = params.instance.accessToken || params.installation.defaultAccessToken;
-
-    if (typeof accessToken !== 'string' || accessToken.length < 1) {
-        sdk.notifier.error('No valid acccess token found. Update app or field configuration.');
-        return;
-    }
 
     const result = await sdk.dialogs.openCurrentApp({
         position: 'center',
         title: CTA,
         shouldCloseOnOverlayClick: true,
         shouldCloseOnEscapePress: true,
-        parameters: {domain: params.installation.domain, accessToken},
+        parameters: {domain: params.installation.domain},
         width: 1400,
     });
 
