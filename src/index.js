@@ -4,7 +4,7 @@ import {create} from "@frontify/frontify-finder";
 import logo from './logo.svg';
 
 const CTA = 'Select files from Frontify';
-const FINDER_CLIENT_ID = 'client-92h8gnqkrf6zeqjx';
+const FINDER_CLIENT_ID = 'client-ruf7c6vvzyn3d4fp';
 
 setup({
     cta: CTA,
