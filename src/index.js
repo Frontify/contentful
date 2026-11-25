@@ -4,6 +4,7 @@ import {create} from "@frontify/frontify-finder";
 import logo from './logo.svg';
 
 const CTA = 'Select files from Frontify';
+const FINDER_CLIENT_ID = 'client-92h8gnqkrf6zeqjx';
 
 setup({
     cta: CTA,
@@ -42,7 +43,7 @@ function renderDialog(sdk) {
 
     const finderStart = async () => {
         const finder = await create({
-            clientId: "contentful",
+            clientId: FINDER_CLIENT_ID,
             domain: config.domain,
             options: {
                 allowMultiSelect: true,
