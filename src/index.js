@@ -96,7 +96,7 @@ async function openDialog(sdk) {
         preview_url: item.previewUrl,
         dynamic_url: item.dynamicPreviewUrl,
         src: item.previewUrl,
-        metadataValues: item.metadataValues,
+        metadataValues: toLegacyMetadataValues(item.customMetadata),
         focalPoint: item.focalPoint,
         pageCount: item.pageCount,
         tags: item.tags,
@@ -108,6 +108,30 @@ async function openDialog(sdk) {
     }));
 }
 
+/**
+ * Finder v3 replaced `metadataValues` with `customMetadata`. Convert it back to
+ * the v2 shape ({value, metadataField: {id, label}}) so that existing entries
+ * and consumers of the stored field keep working.
+ */
+function toLegacyMetadataValues(customMetadata) {
+    if (!Array.isArray(customMetadata)) {
+        return [];
+    }
+
+    const toText = (entry) => {
+        const value = entry?.value;
+        return value !== null && typeof value === 'object' ? value.text : value;
+    };
+
+    return customMetadata.flatMap(({property, value, values}) => {
+        const entries = Array.isArray(values) ? values : value ? [value] : [];
+
+        return entries.map((entry) => ({
+            value: toText(entry),
+            metadataField: {id: property.id, label: property.name},
+        }));
+    });
+}
 
 function isDisabled() {
     return false;

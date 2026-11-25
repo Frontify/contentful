@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@contentful/dam-app-base": "^2.0.32",
-    "@frontify/frontify-finder": "2.1.0"
+    "@frontify/frontify-finder": "3.0.5"
   },
   "scripts": {
     "build": "vite build --base=./ --outDir build --emptyOutDir",
