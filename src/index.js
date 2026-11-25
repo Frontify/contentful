@@ -94,6 +94,7 @@ async function openDialog(sdk) {
         created: item.createdAt,
         generic_url: item.downloadUrl,
         preview_url: item.previewUrl,
+        dynamic_url: item.dynamicPreviewUrl,
         src: item.previewUrl,
         metadataValues: item.metadataValues,
         focalPoint: item.focalPoint,
