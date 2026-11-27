@@ -4,6 +4,7 @@ import {create} from "@frontify/frontify-finder";
 import logo from './logo.svg';
 
 const CTA = 'Select files from Frontify';
+const FINDER_CLIENT_ID = 'client-ruf7c6vvzyn3d4fp';
 
 setup({
     cta: CTA,
@@ -38,11 +39,11 @@ function makeThumbnail(resource) {
 
 function renderDialog(sdk) {
     const config = sdk.parameters.invocation;
-    document.getElementById('root').style.height = 700 + "px";
+    document.documentElement.classList.add('dialog');
 
     const finderStart = async () => {
         const finder = await create({
-            clientId: "contentful",
+            clientId: FINDER_CLIENT_ID,
             domain: config.domain,
             options: {
                 allowMultiSelect: true,
@@ -50,7 +51,6 @@ function renderDialog(sdk) {
             }
         });
         finder.mount(document.getElementById('root'));
-        sdk.window.startAutoResizer();
 
         finder.onAssetsChosen((assets) => {
             sdk.close(assets || []);
@@ -78,6 +78,7 @@ async function openDialog(sdk) {
         shouldCloseOnEscapePress: true,
         parameters: {domain: params.installation.domain},
         width: 1400,
+        minHeight: '80vh',
     });
 
     if (!Array.isArray(result)) {
@@ -94,8 +95,9 @@ async function openDialog(sdk) {
         created: item.createdAt,
         generic_url: item.downloadUrl,
         preview_url: item.previewUrl,
+        dynamic_url: item.dynamicPreviewUrl,
         src: item.previewUrl,
-        metadataValues: item.metadataValues,
+        metadataValues: toLegacyMetadataValues(item.customMetadata),
         focalPoint: item.focalPoint,
         pageCount: item.pageCount,
         tags: item.tags,
@@ -107,6 +109,30 @@ async function openDialog(sdk) {
     }));
 }
 
+/**
+ * Finder v3 replaced `metadataValues` with `customMetadata`. Convert it back to
+ * the v2 shape ({value, metadataField: {id, label}}) so that existing entries
+ * and consumers of the stored field keep working.
+ */
+function toLegacyMetadataValues(customMetadata) {
+    if (!Array.isArray(customMetadata)) {
+        return [];
+    }
+
+    const toText = (entry) => {
+        const value = entry?.value;
+        return value !== null && typeof value === 'object' ? value.text : value;
+    };
+
+    return customMetadata.flatMap(({property, value, values}) => {
+        const entries = Array.isArray(values) ? values : value ? [value] : [];
+
+        return entries.map((entry) => ({
+            value: toText(entry),
+            metadataField: {id: property.id, label: property.name},
+        }));
+    });
+}
 
 function isDisabled() {
     return false;
