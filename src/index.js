@@ -39,7 +39,6 @@ function makeThumbnail(resource) {
 
 function renderDialog(sdk) {
     const config = sdk.parameters.invocation;
-    document.getElementById('root').style.height = 700 + "px";
 
     const finderStart = async () => {
         const finder = await create({
@@ -51,7 +50,6 @@ function renderDialog(sdk) {
             }
         });
         finder.mount(document.getElementById('root'));
-        sdk.window.startAutoResizer();
 
         finder.onAssetsChosen((assets) => {
             sdk.close(assets || []);
@@ -79,6 +77,7 @@ async function openDialog(sdk) {
         shouldCloseOnEscapePress: true,
         parameters: {domain: params.installation.domain},
         width: 1400,
+        minHeight: '80vh',
     });
 
     if (!Array.isArray(result)) {
