@@ -39,6 +39,7 @@ function makeThumbnail(resource) {
 
 function renderDialog(sdk) {
     const config = sdk.parameters.invocation;
+    document.documentElement.classList.add('dialog');
 
     const finderStart = async () => {
         const finder = await create({

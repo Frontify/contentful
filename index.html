@@ -6,15 +6,23 @@
         html, body {
             padding: 0;
             margin: 0;
-            height: 100%;
         }
 
         #root {
-            height: 100%;
             width: 100%;
+        }
+
+        /* Dialog only: fill the modal. Other locations (e.g. the entry field)
+           must keep auto height so Contentful's auto-resizer can measure content. */
+        html.dialog, html.dialog body {
+            height: 100%;
+        }
+
+        html.dialog #root {
+            height: 100%;
             overflow: hidden;
         }
-        
+
         .frontify-finder-iframe {
             border: 0;
             height: 100%;
